@@ -5,6 +5,7 @@ let
 		elemAt
 		filter
 		foldl'
+		isAttrs
 		isList
 		length
 		split
@@ -101,8 +102,26 @@ let
 		}
 	;
 
+	repeat_string = string: n:
+		if n == 0 then "" else (string + repeat_string string (n - 1))
+	;
+
+	tree_to_string_indented_ = tree: indent:
+		(repeat_string "  " indent) + (
+			if isAttrs tree then
+				tree.data + "\n"
+				+ (tree_to_string_indented_ tree.left  (indent+1)) + "\n"
+				+ (tree_to_string_indented_ tree.right (indent+1))
+			else
+				tree
+		)
+	;
+	tree_to_string_indented = tree:
+		tree_to_string_indented_ tree 0;
+
 in
 	input:
 	input
 		|> input_to_tokens
 		|> tokens_to_tree
+		|> tree_to_string_indented
