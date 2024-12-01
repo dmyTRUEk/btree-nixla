@@ -26,7 +26,15 @@ let
 
 	string_to_list = string: filter (el: el != "") (split_ "" string);
 
+	# src: https://github.com/hsjobeki/nixpkgs/blob/migrate-doc-comments/lib/lists.nix#L431:C3
+	flatten_list = x: if isList x then concatMap (y: flatten_list y) x else [x];
+
+	input_to_tokens = input:
+		filter
+			(el: el != "" && el != " ")
+			(flatten_list (split "([ \(\)])" input))
+	;
 in
 	input:
 	input
-		|> string_to_list
+		|> input_to_tokens
