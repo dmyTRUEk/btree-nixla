@@ -119,9 +119,21 @@ let
 	tree_to_string_indented = tree:
 		tree_to_string_indented_ tree 0;
 
+	tree_reverse = tree:
+		if isAttrs tree then
+			{
+				data  = tree.data;
+				left  = tree_reverse tree.right;
+				right = tree_reverse tree.left;
+			}
+		else
+			tree
+	;
+
 in
 	input:
 	input
 		|> input_to_tokens
 		|> tokens_to_tree
+		|> tree_reverse
 		|> tree_to_string_indented
