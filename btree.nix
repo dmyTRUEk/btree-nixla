@@ -66,8 +66,8 @@ let
 					else if acc.right_tokens == [] then
 						acc // { right_tokens = [el]; }
 					else
-						acc
-						# unreachable ""
+						# acc
+						unreachable "el = ${el}, acc = ${acc}"
 				else #if acc.br_level == 0 then
 					if acc.is_writing_to_left then
 						acc // { left_tokens = acc.left_tokens ++ [el]; }
@@ -77,7 +77,7 @@ let
 			)
 			{
 				br_level = 0;
-				data = null;
+				data = null; # TODO(refactor): extract default value
 				is_writing_to_left = true;
 				left_tokens = [];
 				right_tokens = [];
