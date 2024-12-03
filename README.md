@@ -55,3 +55,24 @@ a
     2
     1
 ```
+
+
+### Example 5: traverse tree
+[main.nix at b0ed48a](https://github.com/dmyTRUEk/btree-nixla/blob/b0ed48a2f122f17a5f0f1c887f3db75703e0f6e2/main.nix)
+```nix
+# main-b0ed48a.nix
+...
+tree_dfs_preorder = tree:
+  if !isAttrs tree then
+    [tree]
+  else
+    [tree.data] ++
+    tree_dfs_preorder tree.left ++
+    tree_dfs_preorder tree.right
+;
+...
+```
+```bash
+$ nixla-nix main-b0ed48a.nix '(a (b 1 2) (c 3 (d (e 7 8) 6)))'
+[ "a" "b" "1" "2" "c" "3" "d" "e" "7" "8" "6" ]
+```
