@@ -130,10 +130,40 @@ let
 			tree
 	;
 
+	tree_dfs_preorder = tree:
+		if !isAttrs tree then
+			[tree]
+		else
+			[tree.data] ++
+			tree_dfs_preorder tree.left ++
+			tree_dfs_preorder tree.right
+	;
+
+	tree_dfs_inorder = tree:
+		if !isAttrs tree then
+			[tree]
+		else
+			tree_dfs_inorder tree.left ++
+			[tree.data] ++
+			tree_dfs_inorder tree.right
+	;
+
+	tree_dfs_postorder = tree:
+		if !isAttrs tree then
+			[tree]
+		else
+			tree_dfs_postorder tree.left ++
+			tree_dfs_postorder tree.right ++
+			[tree.data]
+	;
+
 in
 	input:
 	input
 		|> input_to_tokens
 		|> tokens_to_tree
-		|> tree_reverse
-		|> tree_to_string_indented
+		# |> tree_to_string_indented
+		# |> tree_reverse
+		|> tree_dfs_preorder
+		# |> tree_dfs_inorder
+		# |> tree_dfs_postorder
